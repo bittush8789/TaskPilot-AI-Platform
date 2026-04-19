@@ -1,0 +1,10 @@
+CREATE DATABASE IF NOT EXISTS taskpilot_db;
+USE taskpilot_db;
+
+CREATE TABLE IF NOT EXISTS history (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tool_name VARCHAR(100) NOT NULL,
+    user_input TEXT NOT NULL,
+    ai_output TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

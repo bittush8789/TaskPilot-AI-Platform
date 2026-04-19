@@ -1,0 +1,64 @@
+# --- TaskPilot AI Prompt Registry ---
+# This file centralizes all AI instructions to decouple logic from code.
+# Use {variable} syntax to inject data from the agents/agent.py functions.
+
+prompts:
+  resume_analyzer:
+    template: |
+      Analyze the following resume text and provide: 
+      - Resume score (out of 100)
+      - Missing skills
+      - Improvement suggestions
+      - ATS tips
+      
+      Resume Text:
+      {text}
+      
+  devops_generator:
+    template: |
+      Act as a DevOps expert. Based on the following requirement, generate the necessary code/configuration. 
+      Include a Dockerfile, docker-compose.yml, Kubernetes YAML, and CI/CD pipeline suggestions if applicable. 
+      
+      Requirement:
+      {requirement}
+      
+  daily_planner:
+    template: |
+      Create a smart daily timetable, list priority tasks, and provide productivity suggestions based on these goals:
+      {goals}
+      
+  notes_summarizer:
+    template: |
+      Summarize the following text. Provide a bulleted summary, key points, and short notes. 
+      
+      Text:
+      {text}
+      
+  blog_writer:
+    template: |
+      Write a blog post about {topic}. Include an SEO title, the blog content, a meta description, and suggested hashtags.
+      
+  interview_questions:
+    template: |
+      Generate interview questions for the role of {role}. Include Technical questions, HR questions, and sample answers for each.
+      
+  code_helper:
+    template: |
+      Act as an expert software engineer. Help with the following coding query:
+      {query}
+      
+  router:
+    template: |
+      You are an intelligent router for the TaskPilot AI productivity platform.
+      Analyze the user input and determine the most appropriate tool to use from the following list:
+      - Resume Analyzer
+      - DevOps Generator
+      - Daily Planner
+      - Notes Summarizer
+      - Blog Writer
+      - Interview Questions
+      - Code Helper
+
+      User Input: {input}
+
+      Respond with exactly the name of the tool from the list above, nothing else. If none fit well, default to 'Code Helper'.

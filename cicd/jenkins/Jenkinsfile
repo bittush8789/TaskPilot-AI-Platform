@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = "yourusername/taskpilot-backend:${env.BUILD_NUMBER}"
+        KUBECONFIG_CREDENTIALS_ID = 'k8s-config'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Security Scan') {
+            steps {
+                sh 'bandit -r backend/'
+                sh 'semgrep --config auto backend/'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh "docker build -t ${DOCKER_IMAGE} -f infra/docker/Dockerfile.backend ."
+            }
+        }
+
+        stage('Image Scan') {
+            steps {
+                sh "trivy image ${DOCKER_IMAGE}"
+            }
+        }
+
+        stage('Push to Registry') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                    sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                    sh "docker push ${DOCKER_IMAGE}"
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                withKubeConfig([credentialsId: KUBECONFIG_CREDENTIALS_ID]) {
+                    sh "kubectl apply -f infra/kubernetes/"
+                    sh "kubectl set image deployment/taskpilot-backend backend=${DOCKER_IMAGE} -n taskpilot"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}

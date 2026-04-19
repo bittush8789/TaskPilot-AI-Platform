@@ -1,0 +1,21 @@
+{
+  "dashboard": {
+    "title": "TaskPilot AI Performance Dashboard",
+    "panels": [
+      {
+        "title": "API Latency (ms)",
+        "type": "graph",
+        "targets": [
+          { "expr": "avg(taskpilot_backend_latency_ms)" }
+        ]
+      },
+      {
+        "title": "Total AI Requests",
+        "type": "stat",
+        "targets": [
+          { "expr": "count(taskpilot_backend_requests_total)" }
+        ]
+      }
+    ]
+  }
+}

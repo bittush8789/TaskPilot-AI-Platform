@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+sqlalchemy
+pymysql
+langchain
+langchain-google-genai
+langgraph
+pydantic
+python-dotenv
+pyyaml
+aiosqlite
